@@ -41,7 +41,7 @@ export default function AddMealModal({ date, onClose, onSaved }: {
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageBase64: base64, mimeType: file.type }),
+        body: JSON.stringify({ imageBase64: base64, mimeType: 'image/jpeg' }),
       })
       const data = await res.json()
       setFoodName(data.food_name ?? '')
@@ -55,13 +55,21 @@ export default function AddMealModal({ date, onClose, onSaved }: {
 
   function fileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const result = reader.result as string
-        resolve(result.split(',')[1])
+      const img = new Image()
+      const url = URL.createObjectURL(file)
+      img.onload = () => {
+        const MAX = 800
+        const ratio = Math.min(MAX / img.width, MAX / img.height, 1)
+        const canvas = document.createElement('canvas')
+        canvas.width = img.width * ratio
+        canvas.height = img.height * ratio
+        canvas.getContext('2d')!.drawImage(img, 0, 0, canvas.width, canvas.height)
+        URL.revokeObjectURL(url)
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7)
+        resolve(dataUrl.split(',')[1])
       }
-      reader.onerror = reject
-      reader.readAsDataURL(file)
+      img.onerror = reject
+      img.src = url
     })
   }
 
