@@ -3,10 +3,10 @@
 import { useState } from 'react'
 
 const MEALS = [
-  { name: '루틴식', desc: '하루를 시작하는 고정 식사. 양은 중간 정도.', emoji: '🌅' },
-  { name: '본능식', desc: '지금 가장 먹고 싶은 음식. 하루 중 양이 제일 많음.', emoji: '🍽️' },
-  { name: '간식', desc: '디저트·군것질. 하루의 결핍을 소량으로 채움.', emoji: '🍬' },
-  { name: '추가식', desc: '하루 마지막 소량 식사. 양이 제일 적음.', emoji: '➕' },
+  { name: '루틴식', desc: '하루를 시작하는 고정 식사. 양은 중간 정도.', emoji: '🌅', dots: '●●●○' },
+  { name: '본능식', desc: '지금 가장 먹고 싶은 음식. 하루 중 양이 제일 많음.', emoji: '🍽️', dots: '●●●●' },
+  { name: '간식', desc: '디저트·군것질. 하루의 결핍을 소량으로 채움.', emoji: '🍬', dots: '●●○○' },
+  { name: '추가식', desc: '하루 마지막 소량 식사. 양이 제일 적음.', emoji: '➕', dots: '●○○○' },
 ]
 
 export default function HelpButton() {
@@ -61,7 +61,7 @@ export default function HelpButton() {
                     <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 2 }}>
                       {m.name}
                       <span style={{ fontSize: 11, color: '#aaa', fontWeight: 400, marginLeft: 6 }}>
-                        {'●'.repeat(4 - i) + '○'.repeat(i)} 양
+                        {m.dots} 양
                       </span>
                     </div>
                     <div style={{ fontSize: 12, color: '#777', lineHeight: 1.5 }}>{m.desc}</div>
