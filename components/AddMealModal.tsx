@@ -5,10 +5,10 @@ import { supabase, MealType } from '@/lib/supabase'
 
 const MEAL_TYPES: MealType[] = ['루틴식', '본능식', '간식', '추가식']
 const MEAL_BG: Record<MealType, string> = {
-  루틴식: '#FFF3CD', 본능식: '#D1ECF1', 간식: '#D4EDDA', 추가식: '#F8D7DA',
+  루틴식: '#f7f3e8', 본능식: '#eaf3f5', 간식: '#eaf4ec', 추가식: '#f5eaeb',
 }
 const MEAL_COLOR: Record<MealType, string> = {
-  루틴식: '#856404', 본능식: '#0C5460', 간식: '#155724', 추가식: '#721C24',
+  루틴식: '#7a6a3a', 본능식: '#3a5a60', 간식: '#3a5a42', 추가식: '#6a3a3e',
 }
 
 export default function AddMealModal({ date, onClose, onSaved }: {
@@ -20,7 +20,7 @@ export default function AddMealModal({ date, onClose, onSaved }: {
   const [foodName, setFoodName] = useState('')
   const [calories, setCalories] = useState('')
   const [note, setNote] = useState('')
-  const [analyzing, setAnalyzing] = useState(false)
+  const [showCalories, setShowCalories] = useState(false)
   const [saving, setSaving] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const cameraRef = useRef<HTMLInputElement>(null)
@@ -29,48 +29,7 @@ export default function AddMealModal({ date, onClose, onSaved }: {
     const file = e.target.files?.[0]
     if (!file) return
     setImageFile(file)
-    const url = URL.createObjectURL(file)
-    setPreview(url)
-    analyzeImage(file)
-  }
-
-  async function analyzeImage(file: File) {
-    setAnalyzing(true)
-    try {
-      const base64 = await fileToBase64(file)
-      const res = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageBase64: base64, mimeType: 'image/jpeg' }),
-      })
-      const data = await res.json()
-      setFoodName(data.food_name ?? '')
-      setCalories(data.calories ? String(data.calories) : '')
-    } catch (err) {
-      console.error('AI 분석 실패:', err)
-    } finally {
-      setAnalyzing(false)
-    }
-  }
-
-  function fileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const img = new Image()
-      const url = URL.createObjectURL(file)
-      img.onload = () => {
-        const MAX = 800
-        const ratio = Math.min(MAX / img.width, MAX / img.height, 1)
-        const canvas = document.createElement('canvas')
-        canvas.width = img.width * ratio
-        canvas.height = img.height * ratio
-        canvas.getContext('2d')!.drawImage(img, 0, 0, canvas.width, canvas.height)
-        URL.revokeObjectURL(url)
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.7)
-        resolve(dataUrl.split(',')[1])
-      }
-      img.onerror = reject
-      img.src = url
-    })
+    setPreview(URL.createObjectURL(file))
   }
 
   async function handleSave() {
@@ -132,9 +91,8 @@ export default function AddMealModal({ date, onClose, onSaved }: {
 
         {/* 사진 업로드 */}
         <div style={{ fontSize: 12, color: '#888', marginBottom: 8 }}>사진</div>
-
         {preview ? (
-          <div style={{ position: 'relative', marginBottom: 10 }}>
+          <div style={{ position: 'relative', marginBottom: 16 }}>
             <img src={preview} alt="미리보기" style={{ width: '100%', borderRadius: 12, display: 'block' }} />
             <button
               onClick={() => { setPreview(null); setImageFile(null) }}
@@ -148,38 +106,24 @@ export default function AddMealModal({ date, onClose, onSaved }: {
           </div>
         ) : (
           <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-            <button
-              onClick={() => cameraRef.current?.click()}
-              style={{
-                flex: 1, padding: '20px 0', background: '#f7f7f7', border: '1.5px dashed #ddd',
-                borderRadius: 12, cursor: 'pointer', display: 'flex', flexDirection: 'column',
-                alignItems: 'center', gap: 6, color: '#888', fontSize: 12,
-              }}
-            >
+            <button onClick={() => cameraRef.current?.click()} style={{
+              flex: 1, padding: '20px 0', background: '#f7f7f7', border: '1.5px dashed #ddd',
+              borderRadius: 12, cursor: 'pointer', display: 'flex', flexDirection: 'column',
+              alignItems: 'center', gap: 6, color: '#888', fontSize: 12,
+            }}>
               <span style={{ fontSize: 28 }}>📷</span>카메라
             </button>
-            <button
-              onClick={() => fileRef.current?.click()}
-              style={{
-                flex: 1, padding: '20px 0', background: '#f7f7f7', border: '1.5px dashed #ddd',
-                borderRadius: 12, cursor: 'pointer', display: 'flex', flexDirection: 'column',
-                alignItems: 'center', gap: 6, color: '#888', fontSize: 12,
-              }}
-            >
+            <button onClick={() => fileRef.current?.click()} style={{
+              flex: 1, padding: '20px 0', background: '#f7f7f7', border: '1.5px dashed #ddd',
+              borderRadius: 12, cursor: 'pointer', display: 'flex', flexDirection: 'column',
+              alignItems: 'center', gap: 6, color: '#888', fontSize: 12,
+            }}>
               <span style={{ fontSize: 28 }}>🖼️</span>갤러리
             </button>
           </div>
         )}
-
         <input ref={cameraRef} type="file" accept="image/*" capture="environment" onChange={onFileChange} style={{ display: 'none' }} />
         <input ref={fileRef} type="file" accept="image/*" onChange={onFileChange} style={{ display: 'none' }} />
-
-        {/* AI 분석 결과 */}
-        {analyzing && (
-          <div style={{ textAlign: 'center', color: '#888', fontSize: 13, marginBottom: 12 }}>
-            🤖 AI가 음식을 분석하는 중...
-          </div>
-        )}
 
         {/* 음식명 */}
         <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>음식명</div>
@@ -193,19 +137,31 @@ export default function AddMealModal({ date, onClose, onSaved }: {
           }}
         />
 
-        {/* 칼로리 */}
-        <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>칼로리 (kcal)</div>
-        <input
-          value={calories}
-          onChange={e => setCalories(e.target.value)}
-          placeholder="예: 500"
-          type="number"
-          inputMode="numeric"
-          style={{
-            width: '100%', padding: '12px 14px', borderRadius: 10, fontSize: 14,
-            border: '1.5px solid #e8e8e8', marginBottom: 12, outline: 'none',
-          }}
-        />
+        {/* 칼로리 (선택) */}
+        {!showCalories ? (
+          <button
+            onClick={() => setShowCalories(true)}
+            style={{
+              background: 'none', border: 'none', fontSize: 12, color: '#aaa',
+              cursor: 'pointer', padding: '0 0 12px', textDecoration: 'underline',
+            }}
+          >+ 칼로리 입력</button>
+        ) : (
+          <>
+            <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>칼로리 (kcal)</div>
+            <input
+              value={calories}
+              onChange={e => setCalories(e.target.value)}
+              placeholder="예: 500"
+              type="number"
+              inputMode="numeric"
+              style={{
+                width: '100%', padding: '12px 14px', borderRadius: 10, fontSize: 14,
+                border: '1.5px solid #e8e8e8', marginBottom: 12, outline: 'none',
+              }}
+            />
+          </>
+        )}
 
         {/* 메모 */}
         <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>메모 (선택)</div>
@@ -224,7 +180,8 @@ export default function AddMealModal({ date, onClose, onSaved }: {
           disabled={saving}
           style={{
             width: '100%', padding: 16, borderRadius: 12, fontSize: 15, fontWeight: 700,
-            background: saving ? '#ccc' : '#1a1a1a', color: '#fff', border: 'none', cursor: saving ? 'not-allowed' : 'pointer',
+            background: saving ? '#ccc' : '#1a1a1a', color: '#fff', border: 'none',
+            cursor: saving ? 'not-allowed' : 'pointer',
           }}
         >
           {saving ? '저장 중...' : '저장'}
