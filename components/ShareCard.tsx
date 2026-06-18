@@ -73,7 +73,6 @@ export default function ShareCard({ date, logs, onClose }: {
           {/* 날짜 헤더 */}
           <div style={{ marginBottom: 14 }}>
             <div style={{ fontSize: 13, color: '#999', marginBottom: 2 }}>{displayDate}</div>
-            <div style={{ fontSize: 13, color: '#aaa' }}>총 {totalCalories} kcal</div>
           </div>
 
           {/* 사진 그리드 */}
@@ -101,9 +100,6 @@ export default function ShareCard({ date, logs, onClose }: {
                     <div style={{ fontSize: 11, color: '#444', fontWeight: 500 }}>
                       {meal?.food_name ?? '기록 없음'}
                     </div>
-                    {meal?.calories != null && (
-                      <div style={{ fontSize: 10, color: '#bbb', marginTop: 1 }}>{meal.calories} kcal</div>
-                    )}
                   </div>
                 </div>
               )
