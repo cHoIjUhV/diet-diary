@@ -8,13 +8,14 @@ import MealCard from '@/components/MealCard'
 import AddMealModal from '@/components/AddMealModal'
 import CalendarView from '@/components/CalendarView'
 import ShareCard from '@/components/ShareCard'
+import HelpButton from '@/components/HelpButton'
 
 const MEAL_ORDER: MealType[] = ['루틴식', '본능식', '간식', '추가식']
 const MEAL_COLOR: Record<MealType, string> = {
-  루틴식: '#856404', 본능식: '#0C5460', 간식: '#155724', 추가식: '#721C24',
+  루틴식: '#7a6a3a', 본능식: '#3a5a60', 간식: '#3a5a42', 추가식: '#6a3a3e',
 }
 const MEAL_BG: Record<MealType, string> = {
-  루틴식: '#FFF3CD', 본능식: '#D1ECF1', 간식: '#D4EDDA', 추가식: '#F8D7DA',
+  루틴식: '#f7f3e8', 본능식: '#eaf3f5', 간식: '#eaf4ec', 추가식: '#f5eaeb',
 }
 
 export default function Home() {
@@ -137,6 +138,7 @@ export default function Home() {
       {showShare && (
         <ShareCard date={selectedDate} logs={logs} onClose={() => setShowShare(false)} />
       )}
+      <HelpButton />
     </div>
   )
 }
