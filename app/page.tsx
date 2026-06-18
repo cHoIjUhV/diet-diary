@@ -63,7 +63,8 @@ export default function Home() {
           <button
             onClick={() => setShowShare(true)}
             style={{ fontSize: 22, background: 'none', border: 'none', cursor: 'pointer', marginTop: 4 }}
-          >📤</button>
+            title="카드 저장"
+          >🌸</button>
         </div>
         {!isToday && (
           <button
@@ -117,7 +118,11 @@ export default function Home() {
                     textAlign: 'center', color: '#ccc', fontSize: 13, border: '1.5px dashed #e8e8e8',
                   }}>아직 기록 없음</div>
                 ) : (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: grouped[type].length === 1 ? '1fr' : '1fr 1fr',
+                    gap: 8,
+                  }}>
                     {grouped[type].map(log => (
                       <MealCard key={log.id} log={log} onDelete={() => fetchLogs(selectedDate)} />
                     ))}
@@ -138,7 +143,7 @@ export default function Home() {
         background: '#1a1a1a', color: '#fff', fontSize: 28,
         border: 'none', cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100,
-      }}>+</button>
+      }}>✏️</button>
 
       {showAdd && (
         <AddMealModal

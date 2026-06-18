@@ -22,13 +22,13 @@ export default function HelpButton() {
           width: 44, height: 44, borderRadius: '50%',
           background: '#e8e8e8', color: '#555',
           border: 'none', cursor: 'pointer',
-          fontSize: 18, fontWeight: 700,
+          fontSize: 16, fontWeight: 700,
           boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: 100,
         }}
         title="루본간추 설명"
-      >?</button>
+      >💡</button>
 
       {/* 모달 */}
       {open && (

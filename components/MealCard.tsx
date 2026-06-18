@@ -14,7 +14,7 @@ export default function MealCard({ log, onDelete }: { log: MealLog; onDelete: ()
   return (
     <div style={{
       background: '#fff', borderRadius: 12, overflow: 'hidden',
-      border: '1px solid #eee', width: 'calc(50% - 4px)', position: 'relative',
+      border: '1px solid #eee', width: '100%', position: 'relative',
     }}>
       {log.photo_url ? (
         <div style={{ position: 'relative', width: '100%', paddingTop: '100%' }}>
