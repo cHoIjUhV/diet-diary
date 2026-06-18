@@ -50,7 +50,7 @@ export default function ShareCard({ date, logs, onClose }: {
         <div ref={cardRef} style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eee' }}>
           <div style={{ textAlign: 'center', marginBottom: 16 }}>
             <div style={{ fontSize: 12, color: '#888' }}>{displayDate}</div>
-            <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.5px' }}>루본간추 다이어리</div>
+            <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.5px' }}>최주하 식사기록 🍴</div>
             <div style={{ fontSize: 13, color: '#555', marginTop: 4 }}>총 {totalCalories} kcal</div>
           </div>
 

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: '루본간추 다이어리',
+  title: '최주하 식사기록 🍴',
   description: '나만의 식사 기록 앱',
   manifest: '/manifest.json',
 }

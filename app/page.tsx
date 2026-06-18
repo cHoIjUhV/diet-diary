@@ -55,7 +55,7 @@ export default function Home() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <div style={{ fontSize: 13, color: '#888' }}>{displayDate}</div>
-            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 2 }}>루본간추 다이어리</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 2 }}>최주하 식사기록 🍴</div>
           </div>
           <button
             onClick={() => setShowShare(true)}
