@@ -34,31 +34,45 @@ export default function AddMealModal({ date, onClose, onSaved }: {
 
   async function handleSave() {
     setSaving(true)
-    let photoUrl: string | null = null
+    try {
+      let photoUrl: string | null = null
 
-    if (imageFile) {
-      const ext = imageFile.name.split('.').pop()
-      const path = `${date}/${Date.now()}.${ext}`
-      const { error } = await supabase.storage
-        .from('meal-photos')
-        .upload(path, imageFile, { upsert: true })
-      if (!error) {
-        const { data } = supabase.storage.from('meal-photos').getPublicUrl(path)
-        photoUrl = data.publicUrl
+      if (imageFile) {
+        const ext = imageFile.name.split('.').pop() ?? 'jpg'
+        const path = `${date}/${Date.now()}.${ext}`
+        const { error: uploadError } = await supabase.storage
+          .from('meal-photos')
+          .upload(path, imageFile, { upsert: true })
+        if (uploadError) {
+          console.error('사진 업로드 실패:', uploadError)
+        } else {
+          const { data } = supabase.storage.from('meal-photos').getPublicUrl(path)
+          photoUrl = data.publicUrl
+        }
       }
+
+      const { error: insertError } = await supabase.from('meal_logs').insert({
+        date,
+        meal_type: mealType,
+        photo_url: photoUrl,
+        food_name: foodName || null,
+        calories: calories ? parseInt(calories) : null,
+        note: note || null,
+      })
+
+      if (insertError) {
+        console.error('저장 실패:', insertError)
+        alert('저장에 실패했어요: ' + insertError.message)
+        return
+      }
+
+      onSaved()
+    } catch (err) {
+      console.error('handleSave 에러:', err)
+      alert('오류가 발생했어요.')
+    } finally {
+      setSaving(false)
     }
-
-    await supabase.from('meal_logs').insert({
-      date,
-      meal_type: mealType,
-      photo_url: photoUrl,
-      food_name: foodName || null,
-      calories: calories ? parseInt(calories) : null,
-      note: note || null,
-    })
-
-    setSaving(false)
-    onSaved()
   }
 
   return (
