@@ -23,6 +23,7 @@ export default function AddMealModal({ date, onClose, onSaved }: {
   const [analyzing, setAnalyzing] = useState(false)
   const [saving, setSaving] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
+  const cameraRef = useRef<HTMLInputElement>(null)
 
   function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -123,27 +124,47 @@ export default function AddMealModal({ date, onClose, onSaved }: {
 
         {/* 사진 업로드 */}
         <div style={{ fontSize: 12, color: '#888', marginBottom: 8 }}>사진</div>
-        <div
-          onClick={() => fileRef.current?.click()}
-          style={{
-            width: '100%', paddingTop: preview ? 0 : '60%', position: 'relative',
-            background: '#f7f7f7', borderRadius: 12, border: '1.5px dashed #ddd',
-            cursor: 'pointer', overflow: 'hidden', marginBottom: 16,
-          }}
-        >
-          {preview ? (
+
+        {preview ? (
+          <div style={{ position: 'relative', marginBottom: 10 }}>
             <img src={preview} alt="미리보기" style={{ width: '100%', borderRadius: 12, display: 'block' }} />
-          ) : (
-            <div style={{
-              position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
-              alignItems: 'center', justifyContent: 'center', color: '#bbb', gap: 8,
-            }}>
-              <span style={{ fontSize: 36 }}>📷</span>
-              <span style={{ fontSize: 13 }}>사진을 선택하세요</span>
-            </div>
-          )}
-        </div>
-        <input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={onFileChange} style={{ display: 'none' }} />
+            <button
+              onClick={() => { setPreview(null); setImageFile(null) }}
+              style={{
+                position: 'absolute', top: 8, right: 8,
+                background: 'rgba(0,0,0,0.45)', color: '#fff',
+                border: 'none', borderRadius: '50%', width: 26, height: 26,
+                fontSize: 14, cursor: 'pointer',
+              }}
+            >×</button>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+            <button
+              onClick={() => cameraRef.current?.click()}
+              style={{
+                flex: 1, padding: '20px 0', background: '#f7f7f7', border: '1.5px dashed #ddd',
+                borderRadius: 12, cursor: 'pointer', display: 'flex', flexDirection: 'column',
+                alignItems: 'center', gap: 6, color: '#888', fontSize: 12,
+              }}
+            >
+              <span style={{ fontSize: 28 }}>📷</span>카메라
+            </button>
+            <button
+              onClick={() => fileRef.current?.click()}
+              style={{
+                flex: 1, padding: '20px 0', background: '#f7f7f7', border: '1.5px dashed #ddd',
+                borderRadius: 12, cursor: 'pointer', display: 'flex', flexDirection: 'column',
+                alignItems: 'center', gap: 6, color: '#888', fontSize: 12,
+              }}
+            >
+              <span style={{ fontSize: 28 }}>🖼️</span>갤러리
+            </button>
+          </div>
+        )}
+
+        <input ref={cameraRef} type="file" accept="image/*" capture="environment" onChange={onFileChange} style={{ display: 'none' }} />
+        <input ref={fileRef} type="file" accept="image/*" onChange={onFileChange} style={{ display: 'none' }} />
 
         {/* AI 분석 결과 */}
         {analyzing && (
