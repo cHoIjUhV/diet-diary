@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     messages: [
       {
         role: 'user',
-        content: `오늘(${date}) 식사 기록이에요:\n${mealSummary}\n총 ${totalCalories}kcal\n\n루본간추(루틴식-본능식-간식-추가식) 식사법 관점에서 오늘 하루 식사를 2~3문장으로 따뜻하게 총평해줘. 칭찬과 간단한 조언 포함. 친근한 말투로.`,
+        content: `오늘(${date}) 식사 기록이에요:\n${mealSummary}\n총 ${totalCalories}kcal\n\n[루본간추 기준]\n- 루틴식: 하루 첫 끼, 중간 양\n- 본능식: 먹고 싶은 것, 양 최대\n- 간식: 소량 디저트·군것질\n- 추가식: 하루 마지막 소량 식사\n- 감량기 3식, 유지기 4식이 이상적\n- 음식 종류 제한 없이 양만 조절\n\n위 루본간추 기준으로 오늘 하루 식사를 평가해줘. 잘한 점과 한 가지 조언을 2~3문장으로, 친근한 말투로.`,
       },
     ],
   })

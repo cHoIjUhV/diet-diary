@@ -26,6 +26,8 @@ export default function Home() {
   const [showShare, setShowShare] = useState(false)
   const [loading, setLoading] = useState(true)
 
+  const today = format(new Date(), 'yyyy-MM-dd')
+  const isToday = selectedDate === today
   const displayDate = format(new Date(selectedDate + 'T00:00:00'), 'M월 d일 (EEEEE)', { locale: ko })
   const totalCalories = logs.reduce((sum, l) => sum + (l.calories ?? 0), 0)
 
@@ -63,6 +65,16 @@ export default function Home() {
             style={{ fontSize: 22, background: 'none', border: 'none', cursor: 'pointer', marginTop: 4 }}
           >📤</button>
         </div>
+        {!isToday && (
+          <button
+            onClick={() => { setSelectedDate(today); setTab('home') }}
+            style={{
+              marginTop: 10, padding: '6px 14px', borderRadius: 20,
+              background: '#f0f0f0', border: 'none', fontSize: 12,
+              color: '#555', cursor: 'pointer', fontWeight: 600,
+            }}
+          >← 오늘로 이동</button>
+        )}
         <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
           <div style={{ flex: 1, background: '#f7f7f7', borderRadius: 10, padding: '10px 14px' }}>
             <div style={{ fontSize: 11, color: '#888' }}>총 칼로리</div>
