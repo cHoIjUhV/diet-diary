@@ -46,8 +46,8 @@ export default function AddMealModal({ date, onClose, onSaved }: {
       const data = await res.json()
       setFoodName(data.food_name ?? '')
       setCalories(data.calories ? String(data.calories) : '')
-    } catch {
-      // 분석 실패 시 수동 입력
+    } catch (err) {
+      console.error('AI 분석 실패:', err)
     } finally {
       setAnalyzing(false)
     }

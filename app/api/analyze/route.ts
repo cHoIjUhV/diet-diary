@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export async function POST(req: NextRequest) {
+  try {
   const { imageBase64, mimeType } = await req.json()
 
   const response = await client.messages.create({
@@ -35,5 +36,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(result)
   } catch {
     return NextResponse.json({ food_name: '분석 실패', calories: 0 })
+  }
+  } catch (err) {
+    console.error('analyze error:', err)
+    return NextResponse.json({ food_name: '분석 실패', calories: 0 }, { status: 500 })
   }
 }
